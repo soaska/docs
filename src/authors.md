@@ -23,6 +23,15 @@ const members = [
       { icon: { svg: telegramSvg }, link: 'https://t.me/ververy' },  
     ]
   },
+
+  {
+    avatar: 'https://avatars.githubusercontent.com/u/40367813',
+    name: 'Arsenii es3n1n',
+    title: 'продлил нам домен',
+    links: [
+      { icon: 'github', link: 'https://github.com/es3n1n' },
+    ]
+  },
 ]
 </script>
 
