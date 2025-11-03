@@ -7,7 +7,7 @@
 
 [Proxi](https://proxi.soaska.ru) — бесплатный SOCKS5 прокси для Telegram
 
-[Исходный код](https://github.com/soaska/tgproxy)
+[Исходный код](https://github.com/soaska/proxy)
 
 ## Установка
 

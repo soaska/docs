@@ -14,7 +14,7 @@ const PORT = '6666';
 
 Также можно узнать на:
 - Главной странице сайта [proxi.soaska.ru](https://proxi.soaska.ru)
-- В README файле проекта на [GitHub](https://github.com/soaska/tgproxy)
+- В README файле проекта на [GitHub](https://github.com/soaska/proxy)
 - Написав в Telegram: [@cumsorg](https://t.me/cumsorg)
 
 > [!NOTE]
@@ -117,4 +117,4 @@ https://t.me/socks?server={{ ADDRESS }}&port={{ PORT }}
 
 - Telegram: [@cumsorg](https://t.me/cumsorg)
 - Email: [soaska@cornspace.su](mailto:soaska@cornspace.su)
-- GitHub Issues: [github.com/soaska/tgproxy](https://github.com/soaska/tgproxy/issues)
+- GitHub Issues: [github.com/soaska/proxy](https://github.com/soaska/proxy/issues)

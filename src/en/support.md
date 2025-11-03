@@ -6,17 +6,17 @@ If you have questions, problems, or suggestions for improving Proxi, contact us:
 
 - **Telegram**: [@cumsorg](https://t.me/cumsorg)
 - **Email**: [soaska@cornspace.su](mailto:soaska@cornspace.su)
-- **GitHub Issues**: [github.com/soaska/tgproxy](https://github.com/soaska/tgproxy/issues)
+- **GitHub Issues**: [github.com/soaska/proxy](https://github.com/soaska/proxy/issues)
 
 ## Website {#website}
 
 - **Domain**: [proxi.soaska.ru](https://proxi.soaska.ru)
-- **Source Code**: [github.com/soaska/tgproxy](https://github.com/soaska/tgproxy)
+- **Source Code**: [github.com/soaska/proxy](https://github.com/soaska/proxy)
 
 ## Project Support {#support}
 
 Proxi is a free open-source project. If you want to support development:
 
 - Share the project with friends
-- Star on [GitHub](https://github.com/soaska/tgproxy)
-- Report bugs or suggest improvements via [Issues](https://github.com/soaska/tgproxy/issues)
+- Star on [GitHub](https://github.com/soaska/proxy)
+- Report bugs or suggest improvements via [Issues](https://github.com/soaska/proxy/issues)

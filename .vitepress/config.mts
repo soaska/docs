@@ -135,7 +135,7 @@ export default defineConfig({
       dark: "/logo_dark.svg",
     },
     socialLinks: [
-      { icon: "github", link: "https://github.com/soaska/tgproxy" },
+      { icon: "github", link: "https://github.com/soaska/proxy" },
       { icon: { svg: telegramSvg }, link: "https://t.me/cumsorg" },
     ],
   },

@@ -36,6 +36,6 @@ features:
   - icon: 🤝
     title: Open
     details: Open-source on GitHub
-    link: https://github.com/soaska/tgproxy
+    link: https://github.com/soaska/proxy
     linkText: Visit
 ---
