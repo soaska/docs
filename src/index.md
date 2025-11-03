@@ -1,43 +1,41 @@
 ---
 # https://vitepress.dev/reference/default-theme-home-page
 layout: home
-title: Хуёкер
-titleTemplate: :title – Open-source прокси для Docker Hub
+title: Proxi
+titleTemplate: :title – Бесплатный SOCKS5 прокси для Telegram
 
 hero:
-  name: "Хуёкер"
-  text: "Open-source прокси для Docker Hub"
-  tagline: Не рекомендуется для продакшна!
+  name: "Proxi"
+  text: "Бесплатный SOCKS5 прокси для Telegram"
+  tagline: Безопасный доступ к Telegram из любой точки мира
   image:
-    light: /logo_icon.svg
-    dark: /logo_icon_dark.svg
-    alt: Хуёкер
+    light: /logo_light.svg
+    dark: /logo_dark.svg
+    alt: Proxi
   actions:
     - theme: brand
       text: Как использовать
-      link: /use#socks5
+      link: /use
     - theme: alt
-      text: Зачем это нужно
-      link: /reasons
-    - theme: alt
-      text: Поддержать
+      text: Контакты
       link: /support
+    - theme: alt
+      text: Авторы
+      link: /authors
 
 features:
   - icon: ⚡
     title: Быстро
-    details: Решение настраивается за пару минут
+    details: Настройка занимает всего пару минут
   - icon: 💸
     title: Бесплатно
-    details: Мы сделали Хуёкер, чтобы помочь людям, а не для заработка
+    details: Мы создали Proxi, чтобы помочь людям, а не для заработка
+  - icon: 🔒
+    title: Безопасно
+    details: SOCKS5 прокси с whitelist только для Telegram доменов
   - icon: 🤝
-    title: Прозрачно
+    title: Открыто
     details: Открытый исходный код на GitHub
-    link: https://github.com/huecker-io
+    link: https://github.com/soaska/tgproxy
     linkText: Перейти
-  - icon: 😻
-    title: С заботой о животных
-    details: Помогайте бездомным животным вместе с Хуёкером
-    link: /support
-    linkText: Подробнее
 ---

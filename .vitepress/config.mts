@@ -9,36 +9,11 @@ export default defineConfig({
     root: {
       label: "Русский",
       lang: "ru",
-      title: "Хуёкер",
-      titleTemplate: ":title • Хуёкер",
+      title: "Proxi",
+      titleTemplate: ":title • Proxi",
       description:
-        "Open-source прокси для использования Docker Hub из заблокированных стран",
+        "Бесплатный SOCKS5 прокси для Telegram",
       themeConfig: {
-        search: {
-          options: {
-            translations: {
-              button: {
-                buttonText: "Искать",
-                buttonAriaLabel: "Искать",
-              },
-              modal: {
-                displayDetails: "Показать детали",
-                resetButtonTitle: "Сброс",
-                backButtonTitle: "Назад",
-                noResultsText: "Ничего не найдено по запросу",
-                footer: {
-                  selectText: "Открыть",
-                  selectKeyAriaLabel: "Открыть",
-                  navigateText: "Навигация",
-                  navigateUpKeyAriaLabel: "Выше",
-                  navigateDownKeyAriaLabel: "Ниже",
-                  closeText: "Закрыть",
-                  closeKeyAriaLabel: "Закрыть",
-                },
-              },
-            },
-          },
-        },
         lastUpdated: {
           text: "Обновлено",
         },
@@ -57,40 +32,37 @@ export default defineConfig({
         langMenuLabel: "Сменить язык",
         nav: [
           { text: "Как использовать", link: "/use" },
-          { text: "Поддержать", link: "/support" },
+          { text: "Контакты", link: "/support" },
           { text: "Авторы", link: "/authors" },
         ],
         sidebar: [
           {
             text: "Документация",
             items: [
-              { text: "Зачем", link: "/reasons" },
               { text: "Использование", link: "/use" },
-              { text: "Другие зеркала", link: "/others" },
-              { text: "Распространенные проблемы", link: "/issues" },
-              { text: "Поддержать", link: "/support" },
+              { text: "Контакты", link: "/support" },
               { text: "Авторы", link: "/authors" },
             ],
           },
         ],
         footer: {
-          message: "Опубликовано под лицензией Apache-2.0, сервер: dev",
+          message: "Опубликовано под лицензией Apache-2.0",
           copyright:
-            'Создано <a href="https://github.com/altfoxie" target="_blank">@altfoxie</a>, сайт и лого <a href="https://github.com/glebgorokhov" target="_blank">@glebgorokhov</a> <a href="https://github.com/altfoxie/vzlom-kazino" style="text-decoration:none;font-size: 1.3rem;">🎰</a>',
+            'Создано <a href="https://github.com/soaska" target="_blank">@soaska</a> • Основано на <a href="https://huecker.io" target="_blank">huecker.io</a>',
         },
       },
     },
     en: {
       label: "English",
       lang: "en",
-      title: "Huecker",
-      titleTemplate: ":title • Huecker",
+      title: "Proxi",
+      titleTemplate: ":title • Proxi",
       description:
-        "Open-source proxy for using Docker Hub from blocked countries",
+        "Free SOCKS5 proxy for Telegram",
       themeConfig: {
         nav: [
           { text: "How to Use", link: "/en/use" },
-          { text: "Support", link: "/en/support" },
+          { text: "Contacts", link: "/en/support" },
           { text: "Authors", link: "/en/authors" },
         ],
         sidebar: [
@@ -98,24 +70,40 @@ export default defineConfig({
             text: "Documentation",
             base: "/en",
             items: [
-              { text: "Reasons", link: "/reasons" },
               { text: "How to Use", link: "/use" },
-              { text: "Other Mirrors", link: "/others" },
-              { text: "Common Issues", link: "/issues" },
-              { text: "Support", link: "/support" },
+              { text: "Contacts", link: "/support" },
               { text: "Authors", link: "/authors" },
             ],
           },
         ],
         footer: {
-          message: "Published under Apache-2.0 license, server: dev",
+          message: "Published under Apache-2.0 license",
           copyright:
-            'Created by <a href="https://github.com/altfoxie" target="_blank">@altfoxie</a>, site and logo <a href="https://github.com/glebgorokhov" target="_blank">@glebgorokhov</a>',
+            'Created by <a href="https://github.com/soaska" target="_blank">@soaska</a> • Based on <a href="https://huecker.io" target="_blank">huecker.io</a>',
         },
       },
     },
   },
   head: [
+    ["link", { rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
+    [
+      "link",
+      {
+        rel: "icon",
+        type: "image/png",
+        sizes: "192x192",
+        href: "/android-chrome-192x192.png",
+      },
+    ],
+    [
+      "link",
+      {
+        rel: "icon",
+        type: "image/png",
+        sizes: "512x512",
+        href: "/android-chrome-512x512.png",
+      },
+    ],
     [
       "link",
       {
@@ -124,31 +112,13 @@ export default defineConfig({
         href: "/apple-touch-icon.png",
       },
     ],
-    [
-      "link",
-      {
-        rel: "icon",
-        type: "image/png",
-        sizes: "32x32",
-        href: "/favicon-32x32.png",
-      },
-    ],
-    [
-      "link",
-      {
-        rel: "icon",
-        type: "image/png",
-        sizes: "16x16",
-        href: "/favicon-16x16.png",
-      },
-    ],
     ["link", { rel: "manifest", href: "/site.webmanifest" }],
     [
       "link",
-      { rel: "mask-icon", href: "/safari-pinned-tab.svg", color: "#1d63ed" },
+      { rel: "mask-icon", href: "/favico.svg", color: "#1d63ed" },
     ],
-    ["link", { rel: "icon", href: "/favicon.ico" }],
     ["meta", { name: "msapplication-TileColor", content: "#1d63ed" }],
+    ["meta", { name: "msapplication-config", content: "/browserconfig.xml" }],
     ["meta", { name: "theme-color", content: "#ffffff" }],
   ],
   srcDir: "./src",
@@ -159,16 +129,14 @@ export default defineConfig({
     siteTitle: false,
     search: {
       provider: "local",
-      detailedView: true,
     },
     logo: {
       light: "/logo_light.svg",
       dark: "/logo_dark.svg",
     },
     socialLinks: [
-      { icon: "github", link: "https://github.com/huecker-io" },
-      { icon: { svg: telegramSvg }, link: "https://t.me/hueckerio" },
-      { icon: "youtube", link: "https://youtu.be/dQw4w9WgXcQ" },
+      { icon: "github", link: "https://github.com/soaska/tgproxy" },
+      { icon: { svg: telegramSvg }, link: "https://t.me/cumsorg" },
     ],
   },
 });

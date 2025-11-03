@@ -1,91 +1,120 @@
 # How to Use {#usage}
 
-## Docker Hub Unbanned {#unbanned}
+<script setup>
+const ADDRESS = 'proxi.soaska.ru';
+const PORT = '6666';
+</script>
 
-**We won! Docker Hub is available again in Russia.**
+## Getting Proxy Server Address {#get-address}
 
-Using proxies or mirrors is no longer required. We recommend removing them from the Docker configuration.
+Current SOCKS5 proxy server address and port:
 
-## 1. SOCKS5 Proxy {#socks5}
+- **Server**: {{ ADDRESS }}
+- **Port**: {{ PORT }}
 
-<!-- thanks @dmitry_pchelintsev -->
+You can also find it on:
+- Main website [proxi.soaska.ru](https://proxi.soaska.ru)
+- Project README on [GitHub](https://github.com/soaska/tgproxy)
+- By messaging on Telegram: [@cumsorg](https://t.me/cumsorg)
 
-> [!IMPORTANT] Works only with Docker Engine 23.0 and above
+> [!NOTE]
+> The proxy only works with Telegram domains (telegram.org, t.me, telesco.pe, telegram.me, tg.dev).
+> Connecting to other resources through this proxy is not possible.
 
-> [!WARNING] Limitations
-> Proxy connects only to `registry-1.docker.io` and other servers necessary for Docker Hub to work.
-> To access other resources, such as `ghcr.io`, specify their addresses in the `no-proxy` parameter.
+## Telegram Desktop {#telegram-desktop}
 
-**This method eliminates the possibility of traffic interception and image tampering.**
+1. Open Telegram Desktop
+2. Go to **Settings** → **Advanced** → **Connection type**
+3. Select **Use custom proxy**
+4. Click **Add proxy**
+5. Select **SOCKS5** type
+6. Fill in the fields:
+   - **Server**: {{ ADDRESS }}
+   - **Port**: {{ PORT }}
+   - **Username**: leave empty
+   - **Password**: leave empty
+7. Click **Save**
+8. Make sure the proxy is activated (checkbox next to it)
 
-By using a SOCKS5 proxy, you receive data from the original sources **without any modifications**.
-Additionally, SSL certificate verification is performed, reducing the risk **to virtually zero**.
+## Telegram for Android {#telegram-android}
 
-**Config example ([located here](#config-path))**
+1. Open Telegram
+2. Go to **Settings** → **Data and Storage** → **Proxy Settings**
+3. Tap **Add Proxy**
+4. Select **SOCKS5**
+5. Fill in the fields:
+   - **Server**: {{ ADDRESS }}
+   - **Port**: {{ PORT }}
+   - **Username**: leave empty
+   - **Password**: leave empty
+6. Tap **Save**
+7. Enable the **Use Proxy** toggle
 
-```json
-{
-  "proxies": {
-    "https-proxy": "socks5://proxy.huecker.io:443",
-    "no-proxy": "huecker.io,ghcr.io,*.test.example.com,.example.org,127.0.0.0/8"
-  }
-}
+## Telegram for iOS {#telegram-ios}
+
+1. Open Telegram
+2. Go to **Settings** → **Data and Storage** → **Proxy**
+3. Tap **Add Proxy**
+4. Select **SOCKS5**
+5. Fill in the fields:
+   - **Server**: {{ ADDRESS }}
+   - **Port**: {{ PORT }}
+   - **Username**: leave empty
+   - **Password**: leave empty
+6. Tap **Done**
+7. Enable the proxy by tapping on it
+
+## Telegram Web {#telegram-web}
+
+Telegram Web automatically uses your browser's system proxy settings.
+
+To configure proxy in your browser:
+
+### Chrome/Edge/Brave
+
+1. Open **Settings** → **System** → **Open your computer's proxy settings**
+2. Follow the instructions for your operating system
+
+### Firefox
+
+1. Open **Settings** → **General** → **Network Settings** → **Settings**
+2. Select **Manual proxy configuration**
+3. In the **SOCKS Host** field, enter {{ ADDRESS }}
+4. In the **Port** field, enter {{ PORT }}
+5. Select **SOCKS v5**
+6. Click **OK**
+
+## Connection Check {#check-connection}
+
+After configuring the proxy:
+
+1. Telegram should connect automatically
+2. In the proxy settings, you will see the connection status
+3. If the connection doesn't work, check:
+   - Correctness of the entered address and port
+   - Internet availability
+   - Proxy server address is up to date
+
+## Alternative Methods {#alternatives}
+
+### Proxy Link (t.me)
+
+You can share proxy settings via a special link:
+
+```
+https://t.me/socks?server={{ ADDRESS }}&port={{ PORT }}
 ```
 
-<!-- thanks https://github.com/Seokky -->
-<!-- https://github.com/huecker-io/huecker/issues/4 -->
+When you follow such a link, Telegram will automatically offer to add the proxy.
 
-> If you used `registr>y-mirrors`, remove it from the config.
+### QR Code
 
-<!-- thanks @krant0r for 443 -->
+Some versions of Telegram support adding a proxy via QR code. Generate a QR code with the proxy link and scan it in the app.
 
-> IP: `95.217.168.125`, ports: `1080`, `443`
-> We recommend using a domain name, the IP address is not guaranteed to be constant.
+## Need Help? {#help}
 
-**Restart Docker (systemd)**
+If you have problems connecting:
 
-```bash
-$ systemctl restart docker
-```
-
-## 2. As a mirror of docker.io {#mirror}
-
-> [!CAUTION] Act wisely!
-> By using any mirrors, you expose yourself to security risks.
-> Third parties can intercept and modify all traffic, including logins and passwords.
-
-**Config ([located here](#config-path))**
-
-```json
-{
-  "registry-mirrors": ["https://huecker.io"]
-}
-```
-
-**Restart Docker (systemd)**
-
-```bash
-$ systemctl restart docker
-```
-
-Now, when attempting to pull an image, Docker will first try to use the specified mirrors.
-
-[Other Mirrors](others)
-
-## 3. Explicitly specifying the address {#explicit}
-
-```bash
-$ docker pull huecker.io/library/alpine:latest
-$ docker pull huecker.io/n8nio/n8n:latest
-```
-
-## Path to Docker Configuration {#config-path}
-
-| Operating System     | Path to configuration file                   |
-| -------------------- | -------------------------------------------- |
-| Linux, regular setup | /etc/docker/daemon.json                      |
-| Linux, rootless mode | ~/.config/docker/daemon.json                 |
-| macOS                | ~/.docker/daemon.json                        |
-| OrbStack             | Settings -> Docker -> Advanced engine config |
-| Windows              | C:\ProgramData\docker\config\daemon.json     |
-| Docker Desktop       | Preferences -> Docker engine                 |
+- Telegram: [@cumsorg](https://t.me/cumsorg)
+- Email: [soaska@cornspace.su](mailto:soaska@cornspace.su)
+- GitHub Issues: [github.com/soaska/tgproxy](https://github.com/soaska/tgproxy/issues)

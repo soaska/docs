@@ -150,3 +150,19 @@
 code {
   white-space: pre-wrap !important;
 }
+
+/**
+ * Component: Nav Logo
+ * -------------------------------------------------------------------------- */
+
+/* Increase logo size in navbar */
+.VPNavBarTitle .logo {
+  width: auto !important;
+  height: 32px !important;
+}
+
+@media (min-width: 960px) {
+  .VPNavBarTitle .logo {
+    height: 40px !important;
+  }
+}

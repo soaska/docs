@@ -1,11 +1,13 @@
 <img src="./src/public/logo_light.svg#gh-light-mode-only" alt="logo" width="200" />
 <img src="./src/public/logo_dark.svg#gh-dark-mode-only" alt="logo" width="200" />
 
-# Документация Хуёкера
+# Документация Proxi
 
 Сделано с помощью [VitePress](https://vitepress.dev/).
 
-[Хуёкер](https://huecker.io), [исходный код его Registry](https://github.com/huecker-io/huecker)
+[Proxi](https://proxi.soaska.ru) — бесплатный SOCKS5 прокси для Telegram
+
+[Исходный код](https://github.com/soaska/tgproxy)
 
 ## Установка
 

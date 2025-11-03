@@ -4,15 +4,17 @@ import { useData } from "vitepress";
 const data = useData();
 
 const textByLang = {
-  ru: `<b>Docker Hub снова доступен в России</b> ->`,
-  en: `<b>Docker Hub is available in Russia again</b> ->`,
+  ru: `<b>Бесплатный SOCKS5 прокси для Telegram</b> ->`,
+  en: `<b>Free SOCKS5 proxy for Telegram</b> ->`,
 };
 </script>
 
 <template>
   <a
-    :href="`/${data.lang.value !== 'ru' ? `${data.lang.value}/` : ''}use#unbanned`"
+    href="https://t.me/socks?server=proxi.soaska.ru&port=6666"
     class="banner"
+    target="_blank"
+    rel="noopener noreferrer"
   >
     <span class="lines"></span>
     <span class="inner" v-html="textByLang[data.lang.value]" />

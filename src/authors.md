@@ -5,31 +5,12 @@ const telegramSvg = `<svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.or
 
 const members = [
   {
-    avatar: 'https://avatars.githubusercontent.com/u/26873765',
-    name: 'Max Foxie',
-    title: 'виновник торжества',
+    avatar: 'https://github.com/soaska.png',
+    name: 'soaska',
+    title: 'Автор Proxi',
     links: [
-      { icon: 'github', link: 'https://github.com/altfoxie' },
-      { icon: { svg: telegramSvg }, link: 'https://t.me/altfoxie' },
-    ]
-  },
-
-  {
-    avatar: 'https://avatars.githubusercontent.com/u/24701608',
-    name: 'Gleb Gorokhov',
-    title: 'сайт и логотип',
-    links: [
-      { icon: 'github', link: 'https://github.com/glebgorokhov' },
-      { icon: { svg: telegramSvg }, link: 'https://t.me/ververy' },  
-    ]
-  },
-
-  {
-    avatar: 'https://avatars.githubusercontent.com/u/40367813',
-    name: 'Arsenii es3n1n',
-    title: 'продлил нам домен',
-    links: [
-      { icon: 'github', link: 'https://github.com/es3n1n' },
+      { icon: 'github', link: 'https://github.com/soaska' },
+      { icon: { svg: telegramSvg }, link: 'https://t.me/cumsorg' },
     ]
   },
 ]
@@ -38,3 +19,11 @@ const members = [
 # Авторы {#authors}
 
 <VPTeamMembers size="small" :members="members" />
+
+## Благодарности {#credits}
+
+Проект основан на коде [huecker.io](https://huecker.io) — прокси для Docker Hub.
+
+Спасибо оригинальным авторам:
+- [Max Foxie (@altfoxie)](https://github.com/altfoxie) — создатель Huecker
+- [Gleb Gorokhov (@glebgorokhov)](https://github.com/glebgorokhov) — дизайн и логотип

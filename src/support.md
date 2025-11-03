@@ -1,4 +1,22 @@
-# Поддержать {#support}
+# Контакты {#contacts}
 
-- [TeddyFood - агрегатор приютов для бездомных животных](https://teddyfood.com/ru/?ref=oWxsNPj2XClIk5x)
-- [РЭЙ - фонд помощи бездомным животным](https://rayfund.ru/get_involved/donate/)
+Если у вас возникли вопросы, проблемы или предложения по улучшению Proxi, свяжитесь с нами:
+
+## Связь {#communication}
+
+- **Telegram**: [@cumsorg](https://t.me/cumsorg)
+- **Email**: [soaska@cornspace.su](mailto:soaska@cornspace.su)
+- **GitHub Issues**: [github.com/soaska/tgproxy](https://github.com/soaska/tgproxy/issues)
+
+## Сайт {#website}
+
+- **Домен**: [proxi.soaska.ru](https://proxi.soaska.ru)
+- **Исходный код**: [github.com/soaska/tgproxy](https://github.com/soaska/tgproxy)
+
+## Поддержка проекта {#support}
+
+Proxi — это бесплатный проект с открытым исходным кодом. Если вы хотите поддержать разработку:
+
+- Поделитесь проектом с друзьями
+- Поставьте звезду на [GitHub](https://github.com/soaska/tgproxy)
+- Сообщите об ошибках или предложите улучшения через [Issues](https://github.com/soaska/tgproxy/issues)
