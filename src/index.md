@@ -14,6 +14,9 @@ hero:
     alt: Proxi
   actions:
     - theme: brand
+      text: Статистика
+      link: /stats
+    - theme: alt
       text: Как использовать
       link: /use
     - theme: alt

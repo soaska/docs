@@ -7,116 +7,203 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const buildApiUrl = (path: string) => {
+const buildApiUrl = (
+  path: string,
+  options: { cacheBust?: boolean; query?: Record<string, string | number | boolean> } = {},
+) => {
   const url = new URL(path, props.apiBase)
-  url.searchParams.set('ts', Date.now().toString())
+  const { cacheBust = true, query } = options
+
+  if (query) {
+    for (const [key, value] of Object.entries(query)) {
+      url.searchParams.set(key, String(value))
+    }
+  }
+
+  if (cacheBust) {
+    url.searchParams.set('ts', Date.now().toString())
+  }
+
   return url.toString()
 }
 
-const loading = ref(false)
-const loadingLatest = ref(false)
+const isTriggering = ref(false)
+const isRefreshing = ref(false)
+const loadingInitial = ref(false)
 const result = ref<any>(null)
 const error = ref<string | null>(null)
 
-const fetchLatestResult = async () => {
+const normaliseResult = (payload: any) => {
+  if (!payload) {
+    return null
+  }
+  if (typeof payload === 'object' && payload !== null) {
+    if ('result' in payload && payload.result) {
+      return payload.result
+    }
+    return payload
+  }
+  return null
+}
+
+const loadLatestResult = async (silent = false) => {
   try {
-    loadingLatest.value = true
-    const response = await fetch(buildApiUrl('/api/speedtest/latest'), {
-      cache: 'no-store',
-      headers: {
-        'cache-control': 'no-cache',
+    if (silent) {
+      isRefreshing.value = true
+    } else {
+      loadingInitial.value = true
+    }
+
+    const response = await fetch(
+      buildApiUrl('/api/speedtest/latest'),
+      {
+        cache: 'no-store',
+        headers: {
+          'cache-control': 'no-cache',
+        },
       },
-    })
-    
+    )
+
     if (!response.ok) {
       throw new Error('Failed to fetch latest speedtest result')
     }
-    
+
     const data = await response.json()
-    if (data && data.download_mbps !== undefined) {
-      result.value = data
+    const parsed = normaliseResult(data)
+
+    if (parsed) {
+      result.value = parsed
+      error.value = null
+    } else if (!silent) {
+      result.value = null
+      error.value = 'No speedtest results available yet'
     }
-  } catch (e) {
-    // Silently fail for latest result fetch - it's not critical
-    console.warn('Failed to fetch latest speedtest result:', e)
+  } catch (err) {
+    const message = err instanceof Error ? err.message : 'Failed to load speedtest result'
+    if (silent) {
+      console.warn('Failed to fetch latest speedtest result:', message)
+    } else {
+      error.value = message
+      result.value = null
+    }
   } finally {
-    loadingLatest.value = false
+    if (!silent) {
+      loadingInitial.value = false
+    }
+    isRefreshing.value = false
   }
 }
 
-const refreshResult = async () => {
-  loading.value = true
+const refreshLatest = () => loadLatestResult(true)
+
+const runSpeedTest = async () => {
+  if (isTriggering.value) {
+    return
+  }
+
+  isTriggering.value = true
   error.value = null
-  
+
   try {
-    const response = await fetch(buildApiUrl('/api/speedtest/latest'), {
-      cache: 'no-store',
-      headers: {
-        'cache-control': 'no-cache',
+    const response = await fetch(
+      buildApiUrl('/api/speedtest/trigger', {
+        cacheBust: false,
+        query: { source: 'web' },
+      }),
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ source: 'web' }),
       },
-    })
-    
+    )
+
     if (!response.ok) {
-      throw new Error('Failed to fetch latest speedtest result')
+      let message = 'Speed test failed'
+      try {
+        const data = await response.json()
+        message = data.error || data.message || message
+      } catch {
+        // ignore JSON parse issues
+      }
+      throw new Error(message)
     }
-    
+
     const data = await response.json()
-    if (data && data.download_mbps !== undefined) {
-      result.value = data
+    const parsed = normaliseResult(data)
+
+    if (parsed) {
+      result.value = parsed
+      error.value = null
     } else {
-      error.value = 'No speedtest results available'
+      await loadLatestResult(true)
     }
-  } catch (e) {
-    error.value = e instanceof Error ? e.message : 'Failed to load speedtest result'
+  } catch (err) {
+    error.value = err instanceof Error ? err.message : 'Failed to trigger speedtest'
   } finally {
-    loading.value = false
+    isTriggering.value = false
   }
 }
 
 onMounted(() => {
-  fetchLatestResult()
+  loadLatestResult()
 })
 </script>
 
 <template>
   <div class="speedtest-section">
     <h3>🚀 Speed Test</h3>
-    
-    <button
-      @click="refreshResult"
-      :disabled="loading || loadingLatest"
-      class="speedtest-button refresh-button"
-    >
-      {{ loading ? '🔄 Refreshing...' : '🔄 Refresh Latest Result' }}
-    </button>
-    
+
+    <div class="button-row">
+      <button
+        @click="runSpeedTest"
+        :disabled="isTriggering || isRefreshing"
+        class="speedtest-button primary"
+      >
+        {{ isTriggering ? '⏳ Running test…' : '▶ Run Speed Test' }}
+      </button>
+
+      <button
+        @click="refreshLatest"
+        :disabled="isRefreshing || isTriggering"
+        class="speedtest-button secondary"
+      >
+        {{ isRefreshing ? '🔄 Refreshing…' : '🔁 Refresh Latest Result' }}
+      </button>
+    </div>
+
     <div v-if="error" class="error-message">
       ❌ {{ error }}
     </div>
-    
-    <div v-if="loadingLatest && !result" class="loading-message">
-      🔄 Loading latest result...
+
+    <div v-if="loadingInitial && !result" class="loading-message">
+      🔄 Loading latest result…
     </div>
-    
+
+    <div v-else-if="!result && !loadingInitial && !error" class="empty-state">
+      No speedtest results recorded yet.
+    </div>
+
     <div v-if="result" class="result-card">
-      <h4>{{ loading ? '🔄 Refreshing...' : '✅ Latest Speed Test Result' }}</h4>
+      <h4>{{ isTriggering ? '🔄 Running test…' : '✅ Latest Speed Test Result' }}</h4>
       <div class="result-grid">
         <div class="result-item">
           <span class="label">⬇️ Download</span>
-          <span class="value">{{ result.download_mbps.toFixed(2) }} Mbps</span>
+          <span class="value">{{ Number(result.download_mbps ?? 0).toFixed(2) }} Mbps</span>
         </div>
         <div class="result-item">
           <span class="label">⬆️ Upload</span>
-          <span class="value">{{ result.upload_mbps.toFixed(2) }} Mbps</span>
+          <span class="value">{{ Number(result.upload_mbps ?? 0).toFixed(2) }} Mbps</span>
         </div>
         <div class="result-item">
           <span class="label">📡 Ping</span>
-          <span class="value">{{ result.ping_ms.toFixed(2) }} ms</span>
+          <span class="value">{{ Number(result.ping_ms ?? 0).toFixed(2) }} ms</span>
         </div>
       </div>
       <div class="server-info">
-        <p>📍 Server: {{ result.server_name }}</p>
-        <p>🌐 Location: {{ result.server_location }}</p>
+        <p>📍 Server: {{ result.server_name || 'Unknown' }}</p>
+        <p>🌐 Location: {{ result.server_location || 'Unknown' }}</p>
         <p>🕐 Tested: {{ new Date(result.tested_at).toLocaleString() }}</p>
       </div>
     </div>
@@ -132,31 +219,53 @@ onMounted(() => {
 }
 
 .speedtest-section h3 {
-  margin-bottom: 16px;
+  margin-bottom: 20px;
   font-size: 1.2em;
 }
 
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
 .speedtest-button {
-  width: 100%;
+  flex: 1 1 200px;
   padding: 12px 24px;
   font-size: 1em;
   font-weight: 600;
-  background: var(--vp-c-brand-1);
-  color: white;
-  border: none;
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s;
+  border: none;
 }
 
-.speedtest-button:hover:not(:disabled) {
+.speedtest-button.primary {
+  background: var(--vp-c-brand-1);
+  color: white;
+}
+
+.speedtest-button.secondary {
+  background: color-mix(in srgb, var(--vp-c-brand-1) 12%, transparent);
+  color: var(--vp-c-brand-1);
+  border: 1px solid color-mix(in srgb, var(--vp-c-brand-1) 60%, transparent);
+}
+
+.speedtest-button.primary:hover:not(:disabled) {
   background: var(--vp-c-brand-2);
+  transform: translateY(-2px);
+}
+
+.speedtest-button.secondary:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--vp-c-brand-1) 20%, transparent);
   transform: translateY(-2px);
 }
 
 .speedtest-button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+  transform: none;
 }
 
 .error-message {
@@ -167,13 +276,17 @@ onMounted(() => {
   border-radius: 6px;
 }
 
-.loading-message {
+.loading-message,
+.empty-state {
   margin-top: 16px;
   padding: 12px;
   background: var(--vp-c-bg-soft);
   color: var(--vp-c-text-2);
   border-radius: 6px;
   text-align: center;
+}
+
+.loading-message {
   font-style: italic;
 }
 
@@ -222,5 +335,15 @@ onMounted(() => {
 
 .server-info p {
   margin: 4px 0;
+}
+
+@media (max-width: 540px) {
+  .button-row {
+    flex-direction: column;
+  }
+
+  .speedtest-button {
+    width: 100%;
+  }
 }
 </style>
