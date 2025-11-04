@@ -32,6 +32,7 @@ export default defineConfig({
         langMenuLabel: "Сменить язык",
         nav: [
           { text: "Как использовать", link: "/use" },
+          { text: "Статистика", link: "/stats" },
           { text: "Контакты", link: "/support" },
           { text: "Авторы", link: "/authors" },
         ],
@@ -40,6 +41,7 @@ export default defineConfig({
             text: "Документация",
             items: [
               { text: "Использование", link: "/use" },
+              { text: "Статистика", link: "/stats" },
               { text: "Контакты", link: "/support" },
               { text: "Авторы", link: "/authors" },
             ],
@@ -62,6 +64,7 @@ export default defineConfig({
       themeConfig: {
         nav: [
           { text: "How to Use", link: "/en/use" },
+          { text: "Statistics", link: "/en/stats" },
           { text: "Contacts", link: "/en/support" },
           { text: "Authors", link: "/en/authors" },
         ],
@@ -71,6 +74,7 @@ export default defineConfig({
             base: "/en",
             items: [
               { text: "How to Use", link: "/use" },
+              { text: "Statistics", link: "/stats" },
               { text: "Contacts", link: "/support" },
               { text: "Authors", link: "/authors" },
             ],

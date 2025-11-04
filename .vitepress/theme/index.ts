@@ -4,6 +4,10 @@ import type { Theme } from "vitepress";
 import DefaultTheme from "vitepress/theme";
 import "./style.css";
 import Banner from "./Banner.vue";
+import StatsWidget from "./components/StatsWidget.vue";
+import StatCard from "./components/StatCard.vue";
+import GeoChart from "./components/GeoChart.vue";
+import SpeedTestButton from "./components/SpeedTestButton.vue";
 
 export default {
   extends: DefaultTheme,
@@ -14,6 +18,10 @@ export default {
     });
   },
   enhanceApp({ app, router, siteData }) {
-    // ...
+    // Register global components
+    app.component('StatsWidget', StatsWidget);
+    app.component('StatCard', StatCard);
+    app.component('GeoChart', GeoChart);
+    app.component('SpeedTestButton', SpeedTestButton);
   },
 } satisfies Theme;

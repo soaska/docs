@@ -20,6 +20,10 @@ RUN pnpm install --frozen-lockfile
 # Copy source files
 COPY . .
 
+# Build with API URL from build arg
+ARG VITE_API_URL=https://proxi.soaska.ru:8080
+ENV VITE_API_URL=$VITE_API_URL
+
 # Build the documentation
 RUN pnpm run docs:build
 
@@ -31,7 +35,7 @@ COPY --from=builder /app/dist /usr/share/nginx/html
 
 # Copy nginx configuration (optional, using default for now)
 # If you need custom nginx config, uncomment and create nginx.conf:
-# COPY nginx.conf /etc/nginx/nginx.conf
+COPY nginx.conf /etc/nginx/nginx.conf
 
 # Expose port 80
 EXPOSE 80
