@@ -31,6 +31,12 @@ const API_BASE =
   ((import.meta as unknown as { env?: Record<string, string | undefined> }).env?.VITE_API_URL) ??
   'https://proxi.soaska.ru:8080'
 
+const buildApiUrl = (path: string) => {
+  const url = new URL(path, API_BASE)
+  url.searchParams.set('ts', Date.now().toString())
+  return url.toString()
+}
+
 let refreshTimer: number | null = null
 
 const fetchStats = async (options: FetchOptions = {}) => {
@@ -44,7 +50,12 @@ const fetchStats = async (options: FetchOptions = {}) => {
       isRefreshing.value = true
     }
 
-    const response = await fetch(`${API_BASE}/api/stats/public`)
+    const response = await fetch(buildApiUrl('/api/stats/public'), {
+      cache: 'no-store',
+      headers: {
+        'cache-control': 'no-cache',
+      },
+    })
     if (!response.ok) {
       throw new Error('Failed to fetch stats')
     }
@@ -65,6 +76,9 @@ const retryFetch = () => {
 }
 
 const refreshStats = () => {
+  if (isRefreshing.value) {
+    return
+  }
   fetchStats({ silent: true })
 }
 

@@ -7,6 +7,12 @@ interface Props {
 
 const props = defineProps<Props>()
 
+const buildApiUrl = (path: string) => {
+  const url = new URL(path, props.apiBase)
+  url.searchParams.set('ts', Date.now().toString())
+  return url.toString()
+}
+
 const loading = ref(false)
 const loadingLatest = ref(false)
 const result = ref<any>(null)
@@ -15,7 +21,12 @@ const error = ref<string | null>(null)
 const fetchLatestResult = async () => {
   try {
     loadingLatest.value = true
-    const response = await fetch(`${props.apiBase}/api/speedtest/latest`)
+    const response = await fetch(buildApiUrl('/api/speedtest/latest'), {
+      cache: 'no-store',
+      headers: {
+        'cache-control': 'no-cache',
+      },
+    })
     
     if (!response.ok) {
       throw new Error('Failed to fetch latest speedtest result')
@@ -38,7 +49,12 @@ const refreshResult = async () => {
   error.value = null
   
   try {
-    const response = await fetch(`${props.apiBase}/api/speedtest/latest`)
+    const response = await fetch(buildApiUrl('/api/speedtest/latest'), {
+      cache: 'no-store',
+      headers: {
+        'cache-control': 'no-cache',
+      },
+    })
     
     if (!response.ok) {
       throw new Error('Failed to fetch latest speedtest result')
