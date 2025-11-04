@@ -192,13 +192,13 @@ onMounted(() => {
           <span class="label">⬇️ Download</span>
           <span class="value">{{ Number(result.download_mbps ?? 0).toFixed(2) }} Mbps</span>
         </div>
+        <div class="result-item ping-item">
+          <span class="label">📡 Ping</span>
+          <span class="value">{{ Number(result.ping_ms ?? 0).toFixed(2) }} ms</span>
+        </div>
         <div class="result-item">
           <span class="label">⬆️ Upload</span>
           <span class="value">{{ Number(result.upload_mbps ?? 0).toFixed(2) }} Mbps</span>
-        </div>
-        <div class="result-item">
-          <span class="label">📡 Ping</span>
-          <span class="value">{{ Number(result.ping_ms ?? 0).toFixed(2) }} ms</span>
         </div>
       </div>
       <div class="server-info">
@@ -304,7 +304,7 @@ onMounted(() => {
 
 .result-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 16px;
   margin-bottom: 16px;
 }
@@ -313,6 +313,12 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   gap: 4px;
+}
+
+.result-item.ping-item {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
 .result-item .label {
@@ -344,6 +350,10 @@ onMounted(() => {
 
   .speedtest-button {
     width: 100%;
+  }
+
+  .result-grid {
+    grid-template-columns: 1fr;
   }
 }
 </style>
