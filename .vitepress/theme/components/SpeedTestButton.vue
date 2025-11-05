@@ -32,6 +32,8 @@ const isRefreshing = ref(false)
 const loadingInitial = ref(false)
 const result = ref<any>(null)
 const error = ref<string | null>(null)
+const testInProgress = ref(false)
+const infoMessage = ref<string | null>(null)
 
 const normaliseResult = (payload: any) => {
   if (!payload) {
@@ -72,12 +74,29 @@ const loadLatestResult = async (silent = false) => {
     const parsed = normaliseResult(data)
 
     if (parsed) {
-      result.value = parsed
+      const newResult = parsed
+      const oldResult = result.value
+      
+      // Check if result is new (different tested_at timestamp)
+      const isNewResult = !oldResult ||
+        new Date(newResult.tested_at).getTime() !== new Date(oldResult.tested_at).getTime()
+      
+      result.value = newResult
       error.value = null
+      
+      // If we got a new result and test was in progress, clear the progress state
+      if (isNewResult && testInProgress.value) {
+        testInProgress.value = false
+        infoMessage.value = null
+      }
+      
+      return isNewResult
     } else if (!silent) {
       result.value = null
       error.value = 'No speedtest results available yet'
     }
+    
+    return false
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Failed to load speedtest result'
     if (silent) {
@@ -86,6 +105,7 @@ const loadLatestResult = async (silent = false) => {
       error.value = message
       result.value = null
     }
+    return false
   } finally {
     if (!silent) {
       loadingInitial.value = false
@@ -97,7 +117,7 @@ const loadLatestResult = async (silent = false) => {
 const refreshLatest = () => loadLatestResult(true)
 
 const runSpeedTest = async () => {
-  if (isTriggering.value) {
+  if (isTriggering.value || testInProgress.value) {
     return
   }
 
@@ -134,33 +154,12 @@ const runSpeedTest = async () => {
     
     // Check if test was accepted (async execution)
     if (data.status === 'accepted') {
-      // Show info message that test is running
-      const infoDiv = document.createElement('div')
-      infoDiv.className = 'info-message'
-      infoDiv.textContent = '⏳ ' + (data.message || 'Speed test is running. Results will appear in 30-60 seconds.')
+      // Set test in progress state
+      testInProgress.value = true
+      infoMessage.value = data.message || 'Speed test is running. Results will appear in 30-60 seconds.'
       
-      const section = document.querySelector('.speedtest-section')
-      if (section) {
-        const existingInfo = section.querySelector('.info-message')
-        if (existingInfo) existingInfo.remove()
-        section.appendChild(infoDiv)
-        
-        // Auto-remove after 5 seconds and refresh
-        setTimeout(() => {
-          infoDiv.remove()
-          loadLatestResult(true)
-        }, 5000)
-      }
-      
-      // Keep refreshing for a minute to catch the result
-      let refreshCount = 0
-      const refreshInterval = setInterval(() => {
-        refreshCount++
-        loadLatestResult(true)
-        if (refreshCount >= 12) { // 12 * 5 seconds = 60 seconds
-          clearInterval(refreshInterval)
-        }
-      }, 5000)
+      // Start polling for results
+      startPollingForResults()
     } else {
       // Legacy: result returned immediately
       const parsed = normaliseResult(data)
@@ -173,13 +172,74 @@ const runSpeedTest = async () => {
     }
   } catch (err) {
     error.value = err instanceof Error ? err.message : 'Failed to trigger speedtest'
+    testInProgress.value = false
+    infoMessage.value = null
   } finally {
     isTriggering.value = false
   }
 }
 
-onMounted(() => {
-  loadLatestResult()
+let pollingInterval: ReturnType<typeof setInterval> | null = null
+
+const startPollingForResults = () => {
+  // Clear any existing polling
+  if (pollingInterval) {
+    clearInterval(pollingInterval)
+  }
+  
+  let pollCount = 0
+  const maxPolls = 15 // 15 * 5 seconds = 75 seconds total
+  
+  pollingInterval = setInterval(async () => {
+    pollCount++
+    
+    const gotNewResult = await loadLatestResult(true)
+    
+    // Stop polling if we got a new result or reached max polls
+    if (gotNewResult || pollCount >= maxPolls) {
+      if (pollingInterval) {
+        clearInterval(pollingInterval)
+        pollingInterval = null
+      }
+      
+      // Clear progress state after max polls even if no result
+      if (pollCount >= maxPolls && !gotNewResult) {
+        testInProgress.value = false
+        infoMessage.value = null
+        if (!result.value) {
+          error.value = 'Speed test took longer than expected. Try refreshing manually.'
+        }
+      }
+    }
+  }, 5000)
+}
+
+const checkIfTestInProgress = async () => {
+  // Check if the latest result is very recent (within last 2 minutes)
+  // This helps detect if a test was triggered but page wasn't refreshed
+  if (result.value && result.value.tested_at) {
+    const testTime = new Date(result.value.tested_at).getTime()
+    const now = Date.now()
+    const twoMinutesAgo = now - (2 * 60 * 1000)
+    
+    // If test is very recent and within typical test duration window
+    if (testTime > twoMinutesAgo) {
+      // Check if enough time has passed for a cooldown
+      const cooldownMs = 10 * 60 * 1000 // 10 minutes
+      const timeSinceTest = now - testTime
+      
+      if (timeSinceTest < 60 * 1000) {
+        // Test was within last minute - might still be running or just completed
+        // Don't set as in progress since we already have the result
+        return
+      }
+    }
+  }
+}
+
+onMounted(async () => {
+  await loadLatestResult()
+  await checkIfTestInProgress()
 })
 </script>
 
@@ -190,19 +250,23 @@ onMounted(() => {
     <div class="button-row">
       <button
         @click="runSpeedTest"
-        :disabled="isTriggering || isRefreshing"
+        :disabled="isTriggering || isRefreshing || testInProgress"
         class="speedtest-button primary"
       >
-        {{ isTriggering ? '⏳ Running test…' : '▶ Run Speed Test' }}
+        {{ isTriggering ? '⏳ Starting test…' : testInProgress ? '⏳ Test in progress…' : '▶ Run Speed Test' }}
       </button>
 
       <button
         @click="refreshLatest"
-        :disabled="isRefreshing || isTriggering"
+        :disabled="isRefreshing || isTriggering || testInProgress"
         class="speedtest-button secondary"
       >
         {{ isRefreshing ? '🔄 Refreshing…' : '🔁 Refresh Latest Result' }}
       </button>
+    </div>
+
+    <div v-if="testInProgress && infoMessage" class="info-message">
+      ⏳ {{ infoMessage }}
     </div>
 
     <div v-if="error" class="error-message">
@@ -218,7 +282,7 @@ onMounted(() => {
     </div>
 
     <div v-if="result" class="result-card">
-      <h4>{{ isTriggering ? '🔄 Running test…' : '✅ Latest Speed Test Result' }}</h4>
+      <h4>{{ testInProgress ? '🔄 Previous Result (New test in progress…)' : '✅ Latest Speed Test Result' }}</h4>
       <div class="result-grid">
         <div class="result-item">
           <span class="label">⬇️ Download</span>
