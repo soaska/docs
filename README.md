@@ -5,7 +5,7 @@
 
 Сделано с помощью [VitePress](https://vitepress.dev/).
 
-[Proxi](https://proxi.soaska.ru) — бесплатный SOCKS5 прокси для Telegram
+[Proxi](https://proxi.soaska.ru) — бесплатный SOCKS5 прокси для Telegram.
 
 [Исходный код](https://git.cornspace.su/proxi)
 
