@@ -35,7 +35,7 @@ features:
     details: We created Proxi to help people, not to make money
   - icon: 🔒
     title: Secure
-    details: SOCKS5 proxy with whitelist for Telegram domains only
+    details: Secure SOCKS5 proxy with whitelist for Telegram domains only
   - icon: 🤝
     title: Open
     details: Open-source on GitHub

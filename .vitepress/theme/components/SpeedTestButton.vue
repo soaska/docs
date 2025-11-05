@@ -131,13 +131,45 @@ const runSpeedTest = async () => {
     }
 
     const data = await response.json()
-    const parsed = normaliseResult(data)
-
-    if (parsed) {
-      result.value = parsed
-      error.value = null
+    
+    // Check if test was accepted (async execution)
+    if (data.status === 'accepted') {
+      // Show info message that test is running
+      const infoDiv = document.createElement('div')
+      infoDiv.className = 'info-message'
+      infoDiv.textContent = '⏳ ' + (data.message || 'Speed test is running. Results will appear in 30-60 seconds.')
+      
+      const section = document.querySelector('.speedtest-section')
+      if (section) {
+        const existingInfo = section.querySelector('.info-message')
+        if (existingInfo) existingInfo.remove()
+        section.appendChild(infoDiv)
+        
+        // Auto-remove after 5 seconds and refresh
+        setTimeout(() => {
+          infoDiv.remove()
+          loadLatestResult(true)
+        }, 5000)
+      }
+      
+      // Keep refreshing for a minute to catch the result
+      let refreshCount = 0
+      const refreshInterval = setInterval(() => {
+        refreshCount++
+        loadLatestResult(true)
+        if (refreshCount >= 12) { // 12 * 5 seconds = 60 seconds
+          clearInterval(refreshInterval)
+        }
+      }, 5000)
     } else {
-      await loadLatestResult(true)
+      // Legacy: result returned immediately
+      const parsed = normaliseResult(data)
+      if (parsed) {
+        result.value = parsed
+        error.value = null
+      } else {
+        await loadLatestResult(true)
+      }
     }
   } catch (err) {
     error.value = err instanceof Error ? err.message : 'Failed to trigger speedtest'
@@ -341,6 +373,16 @@ onMounted(() => {
 
 .server-info p {
   margin: 4px 0;
+}
+
+.info-message {
+  margin-top: 16px;
+  padding: 12px;
+  background: color-mix(in srgb, var(--vp-c-brand-1) 15%, transparent);
+  color: var(--vp-c-brand-1);
+  border-radius: 6px;
+  border: 1px solid color-mix(in srgb, var(--vp-c-brand-1) 35%, transparent);
+  font-weight: 500;
 }
 
 @media (max-width: 540px) {
