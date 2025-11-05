@@ -5,11 +5,11 @@ const telegramSvg = `<svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.or
 
 const members = [
   {
-    avatar: 'https://github.com/soaska.png',
+    avatar: 'https://git.cornspace.su/soaska.png',
     name: 'soaska',
     title: 'Proxi Author',
     links: [
-      { icon: 'github', link: 'https://github.com/soaska' },
+      { icon: 'github', link: 'https://git.cornspace.su/soaska' },
       { icon: { svg: telegramSvg }, link: 'https://t.me/cumsorg' },
     ]
   },

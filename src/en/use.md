@@ -14,7 +14,7 @@ Current SOCKS5 proxy server address and port:
 
 You can also find it on:
 - Main website [proxi.soaska.ru](https://proxi.soaska.ru)
-- Project README on [GitHub](https://github.com/soaska/proxy)
+- Project README on [GitHub](https://git.cornspace.su/proxi)
 - By messaging on Telegram: [@cumsorg](https://t.me/cumsorg)
 
 > [!NOTE]
@@ -117,4 +117,4 @@ If you have problems connecting:
 
 - Telegram: [@cumsorg](https://t.me/cumsorg)
 - Email: [soaska@cornspace.su](mailto:soaska@cornspace.su)
-- GitHub Issues: [github.com/soaska/proxy](https://github.com/soaska/proxy/issues)
+- GitHub Issues: [github.com/soaska/proxy](https://git.cornspace.su/proxi/issues)

@@ -39,6 +39,6 @@ features:
   - icon: 🤝
     title: Открыто
     details: Открытый исходный код на GitHub
-    link: https://github.com/soaska/proxy
+    link: https://git.cornspace.su/proxi
     linkText: Перейти
 ---

@@ -39,6 +39,6 @@ features:
   - icon: 🤝
     title: Open
     details: Open-source on GitHub
-    link: https://github.com/soaska/proxy
+    link: https://git.cornspace.su/proxi
     linkText: Visit
 ---

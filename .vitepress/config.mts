@@ -50,7 +50,7 @@ export default defineConfig({
         footer: {
           message: "Опубликовано под лицензией Apache-2.0",
           copyright:
-            'Создано <a href="https://github.com/soaska" target="_blank">@soaska</a> • Основано на <a href="https://huecker.io" target="_blank">huecker.io</a>',
+            'Создано <a href="https://git.cornspace.su/soaska" target="_blank">@soaska</a> • Основано на <a href="https://huecker.io" target="_blank">huecker.io</a>',
         },
       },
     },
@@ -83,7 +83,7 @@ export default defineConfig({
         footer: {
           message: "Published under Apache-2.0 license",
           copyright:
-            'Created by <a href="https://github.com/soaska" target="_blank">@soaska</a> • Based on <a href="https://huecker.io" target="_blank">huecker.io</a>',
+            'Created by <a href="https://git.cornspace.su/soaska" target="_blank">@soaska</a> • Based on <a href="https://huecker.io" target="_blank">huecker.io</a>',
         },
       },
     },
@@ -139,7 +139,7 @@ export default defineConfig({
       dark: "/logo_dark.svg",
     },
     socialLinks: [
-      { icon: "github", link: "https://github.com/soaska/proxy" },
+      { icon: "github", link: "https://git.cornspace.su/proxi" },
       { icon: { svg: telegramSvg }, link: "https://t.me/cumsorg" },
     ],
   },
